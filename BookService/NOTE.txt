@@ -32,3 +32,35 @@ public class Author
 }
 
 Unfortunately, this creates a problem when you serialize the models. If you load the related data, it creates a circular object graph.
+
+This problem can be solved using DTO
+
+Right now, our web API exposes the database entities to the client. The client receives data that maps directly 
+to your database tables. However, that's not always a good idea. Sometimes you want to change the shape of the data 
+that you send to client. For example, you might want to:
+
+Hide particular properties that clients are not supposed to view.
+Omit some properties in order to reduce payload size.
+Flatten object graphs that contain nested objects, to make them more convenient for clients.
+Avoid "over-posting" vulnerabilities. 
+Decouple your service layer from your database layer.
+
+To accomplish this, you can define a data transfer object (DTO). 
+A DTO is an object that defines how the data will be sent over the network.
+
+he BookDetailDTO class includes all of the properties from the Book model, 
+except that AuthorName is a string that will hold the author name. The BookDTO class contains a 
+subset of properties from BookDetailDTO.
+
+Next, replace the two GET methods in the BooksController class, 
+with versions that return DTOs. We'll use the LINQ Select statement to convert from Book entities into DTOs.
+
+The Knockout library uses the Model-View-ViewModel (MVVM) pattern:
+
+The model is the server-side representation of the data in the business domain (in our case, books and authors).
+
+The view is the presentation layer (HTML).
+
+The view model is a JavaScript object that holds the models. The view model is a 
+code abstraction of the UI. It has no knowledge of the HTML representation. Instead, 
+it represents abstract features of the view, such as "a list of books".
