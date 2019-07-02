@@ -1,0 +1,34 @@
+﻿Eager Loading
+
+With eager loading, EF loads related entities as part of the initial database query. 
+To perform eager loading, use the System.Data.Entity.Include extension method.
+
+Lazy Loading
+With lazy loading, EF automatically loads a related entity when the navigation 
+property for that entity is dereferenced. To enable lazy loading, make the navigation property virtual. 
+For example, in the Book class: 
+when we do this
+
+// Virtual navigation property
+    public virtual Author Author { get; set; }
+	Now consider the following code:
+	var books = db.Books.ToList();  // Does not load authors
+	var author = books[0].Author;   // Loads the author for books[0]
+
+	When lazy loading is enabled, accessing the Author property on books[0] causes EF to query the database for the author.
+
+	One way to avoid serialization problems is to serialize data transfer objects 
+	(DTOs) instead of entity objects. 
+
+One more thing we need to do is this to get navigational properties back to book from authors
+
+public class Author
+{
+    public int AuthorId { get; set; }
+    [Required]
+    public string Name { get; set; }
+
+    public ICollection<Book> Books { get; set; }
+}
+
+Unfortunately, this creates a problem when you serialize the models. If you load the related data, it creates a circular object graph.

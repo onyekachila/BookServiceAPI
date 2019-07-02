@@ -21,7 +21,7 @@ namespace BookService.Migrations
              new Author() { Id = 3, Name = "Miguel de Cervantes" }
          );
 
-            context.Books.AddOrUpdate(x => x.Id,
+         context.Books.AddOrUpdate(x => x.Id,
                 new Book()
                 {
                     Id = 1,
